@@ -1,55 +1,60 @@
 let chart;
 
 async function getData() {
-    const rain = document.getElementById("rain").value;
-    const traffic = document.getElementById("traffic").value;
-    const area = document.getElementById("area").value;
-    const fraud = document.getElementById("fraudToggle").checked;
+    try {
+        const rain = document.getElementById("rain").value;
+        const traffic = document.getElementById("traffic").value;
+        const area = document.getElementById("area").value;
+        const fraud = document.getElementById("fraudToggle").checked;
 
-    const res = await fetch("https://phantomshield-ai-production.up.railway.app/get_insurance_data", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            rain_mm: parseFloat(rain),
-            traffic: traffic,
-            area: area
-        })
-    });
+        document.getElementById("status").innerText = "Loading...";
 
-    const data = await res.json();
+        const res = await fetch("https://phantomshield-ai-production.up.railway.app/get_insurance_data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                rain_mm: parseFloat(rain),
+                traffic: traffic,
+                area: area
+            })
+        });
 
-    let trust = data.trust_score;
+        if (!res.ok) throw new Error("Network response failed");
 
-    if (fraud) {
-        trust = (trust * 0.3).toFixed(2);
-        data.status = "FLAGGED";
+        const data = await res.json();
+
+        let trust = data.trust_score;
+
+        if (fraud) {
+            trust = (trust * 0.3).toFixed(2);
+            data.status = "FLAGGED";
+        }
+
+        document.getElementById("risk").innerText = data.risk_score;
+        document.getElementById("trust").innerText = trust;
+        document.getElementById("premium").innerText = data.premium;
+
+        const statusEl = document.getElementById("status");
+        statusEl.innerText = data.status;
+        statusEl.className = data.status === "APPROVED" ? "approved" : "flagged";
+
+        document.getElementById("riskBar").style.width = (data.risk_score * 100) + "%";
+        document.getElementById("trustBar").style.width = (trust * 100) + "%";
+
+        document.getElementById("w").innerText = data.debug.weather;
+        document.getElementById("t").innerText = data.debug.traffic;
+        document.getElementById("l").innerText = data.debug.location;
+        document.getElementById("b").innerText = data.debug.behavior;
+
+        updateChart(data.risk_score, trust);
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById("status").innerText = "Server waking up... try again";
+        alert("Backend is waking up. Tap again in 5–10 seconds.");
     }
-
-    document.getElementById("risk").innerText = data.risk_score;
-    document.getElementById("trust").innerText = trust;
-    document.getElementById("premium").innerText = data.premium;
-
-    const statusEl = document.getElementById("status");
-    statusEl.innerText = data.status;
-    statusEl.className = "";
-
-    if (data.status === "APPROVED") {
-        statusEl.classList.add("approved");
-    } else {
-        statusEl.classList.add("flagged");
-    }
-
-    document.getElementById("riskBar").style.width = (data.risk_score * 100) + "%";
-    document.getElementById("trustBar").style.width = (trust * 100) + "%";
-
-    document.getElementById("w").innerText = data.debug.weather;
-    document.getElementById("t").innerText = data.debug.traffic;
-    document.getElementById("l").innerText = data.debug.location;
-    document.getElementById("b").innerText = data.debug.behavior;
-
-    updateChart(data.risk_score, trust);
 }
 
 function updateChart(risk, trust) {
