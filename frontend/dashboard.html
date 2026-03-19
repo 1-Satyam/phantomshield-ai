@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhantomShield Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>PhantomShield</h1>
+    <p>AI Anti-Spoof Insurance Engine</p>
+</header>
+
+<div class="container">
+
+    <div class="grid">
+
+        <!-- INPUT -->
+        <div class="card">
+            <h2>Input Controls</h2>
+
+            <label>Rain (mm)</label>
+            <input type="number" id="rain" value="5">
+
+            <label>Traffic</label>
+            <select id="traffic">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+
+            <label>Area Risk</label>
+            <select id="area">
+                <option value="safe">Safe</option>
+                <option value="moderate">Moderate</option>
+                <option value="danger">Danger</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="fraudToggle">
+                Simulate Fraud User
+            </label>
+
+            <button onclick="getData()">Analyze</button>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="card">
+            <h2>AI Output</h2>
+
+            <div class="metric">
+                <span>Risk Score</span>
+                <h3 id="risk">--</h3>
+            </div>
+
+            <div class="metric">
+                <span>Trust Score</span>
+                <h3 id="trust">--</h3>
+            </div>
+
+            <div class="metric">
+                <span>Weekly Premium</span>
+                <h3>₹<span id="premium">--</span></h3>
+            </div>
+
+            <div class="metric">
+                <span>Status</span>
+                <h3 id="status">--</h3>
+            </div>
+        </div>
+
+        <!-- VISUAL -->
+        <div class="card">
+            <h2>Analytics</h2>
+
+            <canvas id="chart"></canvas>
+
+            <div class="bar">
+                <label>Risk Level</label>
+                <div class="bar-bg">
+                    <div id="riskBar" class="bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="bar">
+                <label>Trust Level</label>
+                <div class="bar-bg">
+                    <div id="trustBar" class="bar-fill trust"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DEBUG -->
+    <div class="card debug-card">
+        <h2>AI Insights</h2>
+        <p>Weather Impact: <span id="w"></span></p>
+        <p>Traffic Impact: <span id="t"></span></p>
+        <p>Location Risk: <span id="l"></span></p>
+        <p>Behavior Score: <span id="b"></span></p>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
