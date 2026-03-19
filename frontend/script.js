@@ -51,9 +51,13 @@ async function getData() {
         updateChart(data.risk_score, trust);
 
     } catch (err) {
-        console.error(err);
-        document.getElementById("status").innerText = "Server waking up... try again";
-        alert("Backend is waking up. Tap again in 5–10 seconds.");
+    console.error(err);
+
+    document.getElementById("status").innerText = "Retrying...";
+
+    setTimeout(() => {
+        getData(); // retry automatically
+    }, 3000);
     }
 }
 
