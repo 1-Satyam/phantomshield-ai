@@ -52,12 +52,7 @@ async function getData() {
 
     } catch (err) {
     console.error(err);
-
-    document.getElementById("status").innerText = "Retrying...";
-
-    setTimeout(() => {
-        getData(); // retry automatically
-    }, 3000);
+    document.getElementById("status").innerText = "Tap again (server starting)";
     }
 }
 
