@@ -4,7 +4,7 @@ import random
 import math
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # 🔥 IMPORTANT: Enables frontend-backend connection
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)  # 🔥 IMPORTANT: Enables frontend-backend connection
 
 
 # -------------------------------
