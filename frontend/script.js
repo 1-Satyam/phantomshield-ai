@@ -6,7 +6,7 @@ async function getData() {
     const area = document.getElementById("area").value;
     const fraud = document.getElementById("fraudToggle").checked;
 
-    const res = await fetch("http://127.0.0.1:5000/get_insurance_data", {
+    const res = await fetch("https://phantomshield-ai-production.up.railway.app/get_insurance_data", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
